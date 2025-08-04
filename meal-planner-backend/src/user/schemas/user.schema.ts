@@ -37,13 +37,13 @@ export const UserSchema = SchemaFactory.createForClass(User);
 // --- VerificationToken Schema ---
 @Schema({ timestamps: true, expires: 3600 })
 export class VerificationToken {
-  @Prop({ required: true, unique: true }) // Eindeutigkeit für den Identifier (z.B. E-Mail)
-  email: string; // E-Mail-Adresse des Benutzers
+  @Prop({ required: true, unique: true })
+  email: string;
 
-  @Prop({ required: true, unique: true }) // Token selbst muss eindeutig sein
+  @Prop({ required: true, unique: true })
   token: string;
 
-  @Prop({ required: true, expires: 0 }) // TTL-Index: Dokument wird automatisch gelöscht, wenn expires erreicht ist
+  @Prop({ required: true, expires: 0 })
   expires: Date;
 }
 

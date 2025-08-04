@@ -1,6 +1,6 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
-import * as jwt from 'jsonwebtoken'; // Oder dein JWT-Bibliothek
+import * as jwt from 'jsonwebtoken';
 
 @Injectable()
 export class JwtAuthMiddleware implements NestMiddleware {
@@ -9,9 +9,9 @@ export class JwtAuthMiddleware implements NestMiddleware {
     if (authHeader && authHeader.startsWith('Bearer ')) {
       const token = authHeader.slice(7, authHeader.length);
       try {
-        const decoded: any = jwt.verify(token, process.env.JWT_SECRET); // JWT_SECRET aus ConfigService holen!
-        // WICHTIG: Hier wird req.user befüllt
-        req['user'] = { userId: decoded.sub }; // Oder wie dein Payload aussieht
+        const decoded: any = jwt.verify(token, process.env.JWT_SECRET);
+
+        req['user'] = { userId: decoded.sub };
         next();
       } catch (err) {
         res.status(401).json({ message: 'Invalid Token' });

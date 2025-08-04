@@ -7,7 +7,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Calendar, Plus, ChefHat } from "lucide-react";
 import { ImageUploadButton } from "@/components/ImageUploadButton";
-import { useToast } from "@/hooks/use-toast"; // falls du ein Toast nutzt
+import { useToast } from "@/hooks/use-toast";
 
 type MealPlan = {
   _id: string;
@@ -37,7 +37,7 @@ export default function MealPlansPage() {
         },
       });
       const data = await res.json();
-      // Prüfe, ob die Antwort ein Array ist oder ein Objekt mit Array
+
       if (Array.isArray(data)) {
         setMealPlans(data);
       } else if (Array.isArray(data.mealPlans)) {
@@ -69,7 +69,6 @@ export default function MealPlansPage() {
         title: "Rezept erstellt!",
         description: `Das Rezept "${data.title}" wurde erstellt.`,
       });
-      // Optional: MealPlans oder Rezepte neu laden
     } catch (e) {
       toast({
         title: "Fehler",

@@ -15,7 +15,7 @@ export class MealPlanService {
     const mealPlan = new this.mealPlanModel({
       ...dto,
       user: userId,
-      image: dto.image, // <--- falls nicht schon durch ...dto abgedeckt
+      image: dto.image,
     });
     return mealPlan.save();
   }
@@ -37,6 +37,6 @@ export class MealPlanService {
   }
 
   async countByUser(userId: string): Promise<number> {
-  return this.mealPlanModel.countDocuments({ user: userId });
-}
+    return this.mealPlanModel.countDocuments({ user: userId });
+  }
 }

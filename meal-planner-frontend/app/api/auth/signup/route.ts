@@ -5,7 +5,7 @@ const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { email, password } = body; // Only send required fields
+    const { email, password } = body;
 
     const backendRes = await fetch(`${apiBaseUrl}/auth/signup`, {
       method: "POST",

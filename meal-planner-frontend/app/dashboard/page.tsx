@@ -24,9 +24,8 @@ type MealPlan = {
   startDate?: string;
   endDate?: string;
   recipes?: any[];
-  image?: string; // <--- HINZUFÜGEN!
+  image?: string;
 };
-
 type Recipe = {
   _id: string;
   title: string;
@@ -75,7 +74,6 @@ export default function DashboardPage() {
           },
         });
         const data = await res.json();
-        // Prüfe, ob die Antwort ein Array ist oder ein Objekt mit Array
         if (Array.isArray(data)) {
           setFetchedRecipes(data);
         } else if (Array.isArray(data.recipes)) {
@@ -284,7 +282,7 @@ export default function DashboardPage() {
                       )}
                       <div className="flex-1">
                         <div className="font-bold">{plan.title}</div>
-                        {/* weitere Infos */}
+                        {/* more Infos */}
                       </div>
                       <Button asChild size="sm" variant="outline">
                         <Link href={`/meal-plans/${plan._id}`}>View</Link>

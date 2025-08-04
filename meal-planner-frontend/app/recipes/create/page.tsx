@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -16,40 +16,60 @@ export default function CreateRecipePage() {
     ingredients: string[];
     instructions: string[];
   } | null>(null);
+  const [mealPlanId, setMealPlanId] = useState<string | undefined>(undefined);
+  const [mealPlans, setMealPlans] = useState<any[]>([]);
   const { toast } = useToast();
   const { data: session } = useSession();
+
+  // MealPlans laden
+  useEffect(() => {
+    async function fetchMealPlans() {
+      const res = await fetch("/api/mealplans", {
+        headers: {
+          Authorization: `Bearer ${session?.accessToken}`,
+        },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setMealPlans(data);
+      }
+    }
+    if (session?.accessToken) fetchMealPlans();
+  }, [session?.accessToken]);
 
   async function handleGenerate() {
     setIsGenerating(true);
     setAiRecipe(null);
     try {
+      const body: any = { prompt };
+      if (mealPlanId) {
+        body.mealPlanId = mealPlanId;
+      }
       const res = await fetch("/api/recipes/generate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${session?.accessToken}`,
         },
-        body: JSON.stringify({
-          prompt,
-        }),
+        body: JSON.stringify(body),
       });
       const data = await res.json();
       if (!res.ok) {
         toast({
-          title: "Fehler bei AI-Generierung",
-          description: data.error || "Unbekannter Fehler",
+          title: "AI generation failed",
+          description: data.error || "Unknown error",
           variant: "destructive",
         });
         return;
       }
       setAiRecipe(data.recipe);
       toast({
-        title: "AI-Rezept generiert!",
-        description: "Das Rezept wurde erfolgreich erstellt.",
+        title: "AI recipe generated!",
+        description: "The recipe was created successfully.",
       });
     } catch (error: any) {
       toast({
-        title: "Fehler bei AI-Generierung",
+        title: "AI generation failed",
         description: error.message,
         variant: "destructive",
       });
@@ -64,7 +84,7 @@ export default function CreateRecipePage() {
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold flex items-center justify-center gap-2">
             <ChefHat className="h-6 w-6 text-primary" />
-            AI Rezept erstellen
+            Create AI Recipe
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -76,26 +96,38 @@ export default function CreateRecipePage() {
             }}
           >
             <Textarea
-              placeholder="Beschreibe dein Wunschrezept (z.B. 'Vegetarisches Curry mit Reis')"
+              placeholder="Describe your desired recipe (e.g. 'Vegetarian curry with rice')"
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
               rows={3}
               required
             />
+            <select
+              value={mealPlanId || ""}
+              onChange={(e) => setMealPlanId(e.target.value || undefined)}
+              className="w-full border rounded p-2"
+            >
+              <option value="">No Meal Plan</option>
+              {mealPlans.map((mp) => (
+                <option key={mp._id} value={mp._id}>
+                  {mp.title}
+                </option>
+              ))}
+            </select>
             <Button
               type="submit"
               className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-primary to-primary/80 text-white font-bold text-lg py-3 rounded-lg shadow-lg hover:scale-[1.03] transition-transform"
               disabled={isGenerating || !prompt}
             >
               <Sparkles className="h-5 w-5" />
-              {isGenerating ? "Generiere ..." : "Mit AI generieren"}
+              {isGenerating ? "Generating ..." : "Generate with AI"}
             </Button>
           </form>
           {aiRecipe && (
             <div className="mt-6">
               <h3 className="font-bold text-lg mb-2">{aiRecipe.title}</h3>
               <div className="mb-2">
-                <span className="font-semibold">Zutaten:</span>
+                <span className="font-semibold">Ingredients:</span>
                 <ul className="list-disc ml-6">
                   {aiRecipe.ingredients.map((ing, idx) => (
                     <li key={idx}>{ing}</li>
@@ -103,7 +135,7 @@ export default function CreateRecipePage() {
                 </ul>
               </div>
               <div>
-                <span className="font-semibold">Zubereitung:</span>
+                <span className="font-semibold">Instructions:</span>
                 <ol className="list-decimal ml-6">
                   {aiRecipe.instructions.map((step, idx) => (
                     <li key={idx}>{step}</li>
@@ -117,11 +149,11 @@ export default function CreateRecipePage() {
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(aiRecipe),
                   });
-                  toast({ title: "Rezept gespeichert!" });
+                  toast({ title: "Recipe saved!" });
                 }}
                 className="mt-4 w-full flex items-center justify-center gap-2 bg-green-500 text-white font-bold py-2 rounded-lg shadow-md hover:bg-green-600 transition-colors"
               >
-                Rezept speichern
+                Save Recipe
               </Button>
             </div>
           )}

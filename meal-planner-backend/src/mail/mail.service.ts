@@ -17,22 +17,15 @@ export class MailService {
 
   async sendWelcomeEmail(email: string) {
     try {
-      // <-- 'try' block starts here
       await this.mailerService.sendMail({
         to: email,
-        subject: 'Willkommen bei MealMind! 🎉',
-        text: 'Danke für deine Registrierung bei MealMind!',
-        html: `<h1>Hallo!</h1><p>Danke für deine Registrierung bei <strong>MealMind</strong>! 🎉</p>`,
+        subject: 'Welcome to MealMind! 🎉',
+        text: 'Thank you for registering with MealMind!',
+        html: `<h1>Hello!</h1><p>Thank you for registering with <strong>MealMind</strong>! 🎉</p>`,
       });
-      console.log(`Willkommens-E-Mail erfolgreich an ${email} gesendet.`);
+      console.log(`Welcome email successfully sent to ${email}.`);
     } catch (error) {
-      // <-- 'catch' block starts here
-      console.error(
-        `Fehler beim Senden der Willkommens-E-Mail an ${email}:`,
-        error,
-      );
-      // Optional: You might want to re-throw the error or handle it more gracefully
-      // throw new Error(`Failed to send welcome email: ${error.message}`);
+      console.error(`Error sending welcome email to ${email}:`, error);
     }
   }
 
@@ -41,16 +34,13 @@ export class MailService {
     try {
       await this.mailerService.sendMail({
         to: email,
-        subject: '🔐 Passwort zurücksetzen',
-        text: `Passwort zurücksetzen: ${resetLink}`,
-        html: `<p>Klicke auf den folgenden Link, um dein Passwort zurückzusetzen:</p><p><a href="${resetLink}">${resetLink}</a></p>`,
+        subject: '🔐 Reset your password',
+        text: `Reset your password: ${resetLink}`,
+        html: `<p>Click the following link to reset your password:</p><p><a href="${resetLink}">${resetLink}</a></p>`,
       });
-      console.log(`Passwort-Reset-E-Mail erfolgreich an ${email} gesendet.`);
+      console.log(`Password reset email successfully sent to ${email}.`);
     } catch (error) {
-      console.error(
-        `Fehler beim Senden der Passwort-Reset-E-Mail an ${email}:`,
-        error,
-      );
+      console.error(`Error sending password reset email to ${email}:`, error);
       // throw new Error(`Failed to send password reset email: ${error.message}`);
     }
   }
@@ -59,13 +49,13 @@ export class MailService {
     try {
       await this.mailerService.sendMail({
         to,
-        subject: '✅ Test-Mail von MealMind (NestJS)',
-        text: 'Hallo, das ist eine Test-Mail von deinem NestJS Backend!',
-        html: '<p><strong>Hallo</strong>, das ist eine Test-Mail von deinem NestJS Backend! 🎯</p>',
+        subject: '✅ Test email from MealMind (NestJS)',
+        text: 'Hello, this is a test email from your NestJS backend!',
+        html: '<p><strong>Hello</strong>, this is a test email from your NestJS backend! 🎯</p>',
       });
-      console.log(`Test-E-Mail erfolgreich an ${to} gesendet.`);
+      console.log(`Test email successfully sent to ${to}.`);
     } catch (error) {
-      console.error(`Fehler beim Senden der Test-E-Mail an ${to}:`, error);
+      console.error(`Error sending test email to ${to}:`, error);
       // throw new Error(`Failed to send test email: ${error.message}`);
     }
   }
@@ -75,20 +65,17 @@ export class MailService {
     try {
       await this.mailerService.sendMail({
         to: email,
-        subject: '📩 Bitte bestätige deine E-Mail-Adresse',
-        text: `Bestätige deine E-Mail-Adresse hier: ${verifyLink}`,
+        subject: '📩 Please verify your email address',
+        text: `Verify your email address here: ${verifyLink}`,
         html: `
-          <p>Willkommen bei <strong>MealMind</strong>!</p>
-          <p>Bitte bestätige deine E-Mail-Adresse, indem du auf den folgenden Link klickst:</p>
+          <p>Welcome to <strong>MealMind</strong>!</p>
+          <p>Please verify your email address by clicking the following link:</p>
           <p><a href="${verifyLink}">${verifyLink}</a></p>
         `,
       });
-      console.log(`Verifizierungs-E-Mail erfolgreich an ${email} gesendet.`);
+      console.log(`Verification email successfully sent to ${email}.`);
     } catch (error) {
-      console.error(
-        `Fehler beim Senden der Verifizierungs-E-Mail an ${email}:`,
-        error,
-      );
+      console.error(`Error sending verification email to ${email}:`, error);
       // throw new Error(`Failed to send verification email: ${error.message}`);
     }
   }

@@ -38,8 +38,6 @@ export class RecipeController {
     private readonly mealPlanService: MealPlanService,
   ) {}
 
-  // ---
-
   //## Recipe Management Endpoints (CRUD)
 
   // ### Create Recipe
@@ -100,8 +98,6 @@ export class RecipeController {
     return this.recipeService.remove(id);
   }
 
-  // ---
-
   // ## AI Recipe Generation
 
   // ### Generate Recipe with AI
@@ -150,8 +146,16 @@ export class RecipeController {
   ) {
     let prompt = body.prompt;
 
-    if (body.mealPlanId) {
-      const mealPlan = await this.mealPlanService.findOne(body.mealPlanId);
+    // KORREKTE Prüfung!
+    const hasValidMealPlanId =
+      typeof body.mealPlanId === 'string' &&
+      body.mealPlanId !== 'undefined' &&
+      body.mealPlanId !== '';
+
+    if (hasValidMealPlanId) {
+      const mealPlan = await this.mealPlanService.findOne(
+        body.mealPlanId as string,
+      );
       if (!mealPlan) {
         throw new BadRequestException('MealPlan not found');
       }
@@ -185,8 +189,8 @@ export class RecipeController {
     }
 
     aiRecipe.author = req.user?.userId;
-    if (body.mealPlanId) {
-      aiRecipe.mealPlan = body.mealPlanId;
+    if (hasValidMealPlanId) {
+      aiRecipe.mealPlan = body.mealPlanId as string;
     }
 
     if (

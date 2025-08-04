@@ -3,17 +3,17 @@ import { IsString, IsArray, IsOptional, IsNumber, Min } from 'class-validator';
 export class GenerateRecipeDto {
   @IsString()
   @IsOptional()
-  mealType?: string; // e.g., 'breakfast', 'lunch', 'dinner'
+  mealType?: string;
 
   @IsArray()
   @IsString({ each: true })
   @IsOptional()
-  dietaryRestrictions?: string[]; // e.g., ['vegetarian', 'gluten-free']
+  dietaryRestrictions?: string[];
 
   @IsArray()
   @IsString({ each: true })
   @IsOptional()
-  allergies?: string[]; // e.g., ['peanuts', 'dairy']
+  allergies?: string[];
 
   @IsNumber()
   @Min(1)
@@ -22,12 +22,13 @@ export class GenerateRecipeDto {
 
   @IsString()
   @IsOptional()
-  cuisine?: string; // e.g., 'Italian', 'Mexican'
+  cuisine?: string;
 
   @IsNumber()
   @Min(1)
   @IsOptional()
-  timeLimitMinutes?: number; // Max preparation/cooking time
+  timeLimitMinutes?: number;
 
-  // Add any other preferences you want to send to Gemini
+  prompt: string;
+  mealPlanId?: string;
 }

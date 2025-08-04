@@ -2,10 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
-    console.log("Authorization Header:", req.headers.get("authorization")); // <-- HIER!
+    console.log("Authorization Header:", req.headers.get("authorization"));
     const { mealPlanId } = await req.json();
 
-    // 1. MealPlan-Daten holen
+    // 1. MealPlan-Data
     const mealPlanRes = await fetch(
       `http://localhost:3001/meal-plans/${mealPlanId}`,
       {
@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
     }
     const mealPlanData = await mealPlanRes.json();
 
-    // 2. Prompt für Gemini bauen
+    // 2. Build Prompt Gemini
     const prompt = `
       Create a creative recipe for the following meal plan:
       Title: ${mealPlanData.title}
@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
       Please return the recipe as JSON with fields: title, ingredients (array), instructions (array).
     `;
 
-    // 3. Call an dein Backend, Prompt mitsenden
+    // 3. Call Backend, Send Prompt
     const res = await fetch("http://localhost:3001/recipes/generate", {
       method: "POST",
       headers: {

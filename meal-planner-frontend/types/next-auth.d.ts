@@ -13,7 +13,6 @@ declare module "next-auth" {
     subscription?: string;
     verified?: boolean;
     allergies?: string[];
-    // weitere Felder...
   }
 
   interface Session {

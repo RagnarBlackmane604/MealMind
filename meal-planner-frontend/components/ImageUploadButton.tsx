@@ -33,9 +33,8 @@ export function ImageUploadButton({
         onUpload(data.secure_url);
       }
     } catch (error) {
-      // Optional: Fehlerbehandlung
     } finally {
-      setLoading(false); // <-- Ladebalken
+      setLoading(false);
     }
   };
 

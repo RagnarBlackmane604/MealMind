@@ -1,5 +1,5 @@
 "use Server";
-// UPDATED
+
 import { signIn, signOut } from "next-auth/react";
 
 export const signup = async (email: string, password: string) => {};

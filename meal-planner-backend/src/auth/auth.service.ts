@@ -3,7 +3,7 @@ import {
   ConflictException,
   UnauthorizedException,
   BadRequestException,
-  InternalServerErrorException, // Neu hinzugefügt
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
@@ -11,17 +11,14 @@ import { OAuth2Client } from 'google-auth-library';
 import { ConfigService } from '@nestjs/config';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { CreateGoogleUserDto } from '../user/dto/create-google-user.dto';
-// import { VerificationToken } from '../models/VerificationToken'; // <-- Direkte Model-Nutzung vermeiden
 
 import { signupSchema } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
-// import { v4 as uuidv4 } from 'uuid'; // <-- Nicht mehr nötig, wenn JWT für Token
 
 import { UserService } from '../user/user.service';
 import { MailService } from '../mail/mail.service';
 import { UserDocument } from '../user/schemas/user.schema';
-import { VerificationTokenService } from '../verification-token/verification-token.service'; // NEU: Dedizierter Service
-
+import { VerificationTokenService } from '../verification-token/verification-token.service';
 @Injectable()
 export class AuthService {
   private googleClient: OAuth2Client;
@@ -31,7 +28,7 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly mailService: MailService,
     private readonly configService: ConfigService,
-    private readonly verificationTokenService: VerificationTokenService, // NEU: Injizieren
+    private readonly verificationTokenService: VerificationTokenService,
   ) {
     this.googleClient = new OAuth2Client(
       this.configService.get<string>('GOOGLE_CLIENT_ID'),
@@ -51,13 +48,11 @@ export class AuthService {
 
     const existing = await this.userService.findByEmail(dto.email);
     if (existing) {
-      // Optional: Wenn der Benutzer existiert, aber nicht verifiziert ist,
-      // kannst du hier die Verifizierungs-E-Mail erneut senden, anstatt einen Konflikt zu werfen.
       if (!existing.isVerified) {
         console.log(
           `User ${dto.email} exists but not verified. Resending verification email.`,
         );
-        // Generiere ein neues Token und sende die E-Mail erneut
+
         const newToken = this.jwtService.sign(
           { email: dto.email, userId: existing._id },
           {
@@ -69,7 +64,7 @@ export class AuthService {
           dto.email,
           newToken,
           new Date(Date.now() + 1000 * 60 * 60 * 24),
-        ); // 24h Gültigkeit
+        );
         await this.mailService.sendVerificationEmail(dto.email, newToken);
         return {
           message:
@@ -82,7 +77,6 @@ export class AuthService {
     }
 
     try {
-      // WICHTIG: Stelle sicher, dass createUser das Passwort HASHED!
       const user = await this.userService.createUser({
         ...dto,
         isVerified: false,
@@ -246,10 +240,10 @@ export class AuthService {
     if (!user) {
       const googleUserDto: CreateGoogleUserDto = {
         email,
-        name: `${given_name || ''} ${family_name || ''}`.trim(), // Null-Checks für Namen
+        name: `${given_name || ''} ${family_name || ''}`.trim(),
         picture,
         googleId,
-        isVerified: true, // Google-E-Mails sind bereits verifiziert
+        isVerified: true,
       };
 
       user = await this.userService.findOrCreateGoogleUser({
@@ -259,15 +253,11 @@ export class AuthService {
         picture,
       });
     } else if (user && !user.googleId) {
-      // Optional: Wenn der Benutzer bereits mit E-Mail/Passwort existiert,
-      // und sich jetzt mit Google anmeldet, verknüpfe das Google-Konto.
       user.googleId = googleId;
-      user.isVerified = true; // Setze auf verifiziert, wenn es nicht schon war
-      await user.save();
+      user.isVerified = true;
     }
 
     if (!user) {
-      // Falls user.createGoogleUser fehlschlägt
       throw new InternalServerErrorException(
         'Fehler bei der Google-Benutzererstellung.',
       );
@@ -298,7 +288,7 @@ export class AuthService {
     return {
       token: this.jwtService.sign(payload, {
         secret: this.configService.get<string>('JWT_SECRET'),
-        expiresIn: '24h', // Optional: Ablaufzeit für Login-Token
+        expiresIn: '24h',
       }),
     };
   }

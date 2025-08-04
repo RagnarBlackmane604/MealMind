@@ -49,7 +49,7 @@ export default function ProfilePage() {
       const reader = new FileReader();
       reader.onload = (ev) => {
         setAvatar(ev.target?.result as string);
-        // Hier könntest du das Bild an dein Backend/Cloudinary schicken
+        //  Bild an Backend/Cloudinary schicken
       };
       reader.readAsDataURL(file);
     }
@@ -102,12 +102,11 @@ export default function ProfilePage() {
           </div>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
-          {/* Weitere Profilinfos */}
           <div>
             <span className="font-semibold">ID:</span>{" "}
             {profile?.id || "Unbekannt"}
           </div>
-          {/* Hier kannst du weitere Felder ergänzen */}
+
           <Button className="w-full mt-4" variant="outline">
             Profil speichern
           </Button>

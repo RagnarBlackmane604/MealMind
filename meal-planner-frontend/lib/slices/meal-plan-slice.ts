@@ -1,43 +1,43 @@
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit"
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 interface MealPlan {
-  id: string
-  name: string
-  description: string
-  duration: number // days
-  meals: Meal[]
-  nutritionalInfo: NutritionalInfo
-  createdAt: string
+  id: string;
+  name: string;
+  description: string;
+  duration: number;
+  meals: Meal[];
+  nutritionalInfo: NutritionalInfo;
+  createdAt: string;
 }
 
 interface Meal {
-  id: string
-  name: string
-  type: "breakfast" | "lunch" | "dinner" | "snack"
-  day: number
-  recipeId?: string
-  ingredients: string[]
-  instructions: string[]
-  prepTime: number
-  cookTime: number
-  servings: number
-  nutritionalInfo: NutritionalInfo
+  id: string;
+  name: string;
+  type: "breakfast" | "lunch" | "dinner" | "snack";
+  day: number;
+  recipeId?: string;
+  ingredients: string[];
+  instructions: string[];
+  prepTime: number;
+  cookTime: number;
+  servings: number;
+  nutritionalInfo: NutritionalInfo;
 }
 
 interface NutritionalInfo {
-  calories: number
-  protein: number
-  carbs: number
-  fat: number
-  fiber: number
-  sugar: number
+  calories: number;
+  protein: number;
+  carbs: number;
+  fat: number;
+  fiber: number;
+  sugar: number;
 }
 
 interface MealPlanState {
-  currentMealPlan: MealPlan | null
-  mealPlans: MealPlan[]
-  isGenerating: boolean
-  error: string | null
+  currentMealPlan: MealPlan | null;
+  mealPlans: MealPlan[];
+  isGenerating: boolean;
+  error: string | null;
 }
 
 const initialState: MealPlanState = {
@@ -45,34 +45,40 @@ const initialState: MealPlanState = {
   mealPlans: [],
   isGenerating: false,
   error: null,
-}
+};
 
 const mealPlanSlice = createSlice({
   name: "mealPlan",
   initialState,
   reducers: {
     setCurrentMealPlan: (state, action: PayloadAction<MealPlan>) => {
-      state.currentMealPlan = action.payload
+      state.currentMealPlan = action.payload;
     },
     addMealPlan: (state, action: PayloadAction<MealPlan>) => {
-      state.mealPlans.push(action.payload)
+      state.mealPlans.push(action.payload);
     },
     setMealPlans: (state, action: PayloadAction<MealPlan[]>) => {
-      state.mealPlans = action.payload
+      state.mealPlans = action.payload;
     },
     setGenerating: (state, action: PayloadAction<boolean>) => {
-      state.isGenerating = action.payload
+      state.isGenerating = action.payload;
     },
     setError: (state, action: PayloadAction<string | null>) => {
-      state.error = action.payload
+      state.error = action.payload;
     },
     clearCurrentMealPlan: (state) => {
-      state.currentMealPlan = null
+      state.currentMealPlan = null;
     },
   },
-})
+});
 
-export const { setCurrentMealPlan, addMealPlan, setMealPlans, setGenerating, setError, clearCurrentMealPlan } =
-  mealPlanSlice.actions
+export const {
+  setCurrentMealPlan,
+  addMealPlan,
+  setMealPlans,
+  setGenerating,
+  setError,
+  clearCurrentMealPlan,
+} = mealPlanSlice.actions;
 
-export default mealPlanSlice.reducer
+export default mealPlanSlice.reducer;

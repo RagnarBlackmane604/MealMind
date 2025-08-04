@@ -11,7 +11,6 @@ export async function GET(
     },
   });
 
-  // Fehlerbehandlung: Wenn keine JSON-Antwort, gib Fehler zurück
   if (!res.ok) {
     return NextResponse.json(
       { error: `MealPlan not found (status ${res.status})` },

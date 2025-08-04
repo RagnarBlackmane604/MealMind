@@ -17,7 +17,7 @@ import { useSession } from "next-auth/react";
 
 export default function CreateRecipePage() {
   const { data: session } = useSession();
-  const token = session?.accessToken; // Passe das ggf. an dein Setup an
+  const token = session?.accessToken;
   const [title, setTitle] = useState("");
   const [ingredients, setIngredients] = useState("");
   const [instructions, setInstructions] = useState("");
@@ -33,7 +33,7 @@ export default function CreateRecipePage() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ prompt: title }), // oder weitere Felder
+        body: JSON.stringify({ prompt: title }),
       });
       const data = await res.json();
       setTitle(data.title || "");

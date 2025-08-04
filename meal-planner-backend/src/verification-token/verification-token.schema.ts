@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-@Schema({ timestamps: true, expires: 3600 }) // expires: 1h
+@Schema({ timestamps: true, expires: 3600 })
 export class VerificationToken extends Document {
   @Prop({ required: true })
   email: string;

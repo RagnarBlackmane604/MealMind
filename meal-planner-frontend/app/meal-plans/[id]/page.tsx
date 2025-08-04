@@ -41,7 +41,6 @@ export default function MealPlanDetailPage() {
           },
         });
         if (!res.ok) {
-          // Optional: Fehler anzeigen
           setPlan(null);
           return;
         }
@@ -90,7 +89,7 @@ export default function MealPlanDetailPage() {
       }),
     });
     setShowUpdateForm(false);
-    // Reload plan data:
+
     const res = await fetch(`/api/meal-plans/${plan!._id}`, {
       headers: {
         Authorization: session?.accessToken

@@ -34,7 +34,7 @@ export class GeminiService {
                 threshold: 'BLOCK_LOW_AND_ABOVE',
               },
             ],
-            responseModalities: ['TEXT'], // <--- nur TEXT!
+            responseModalities: ['TEXT'],
           },
         },
       });

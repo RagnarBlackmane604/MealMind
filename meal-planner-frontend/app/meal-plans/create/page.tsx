@@ -64,7 +64,7 @@ export default function CreateMealPlanPage() {
           goal,
           startDate,
           endDate,
-          image: imageUrl, // Bild-URL mitsenden!
+          image: imageUrl,
           recipes,
           diet,
           allergies,

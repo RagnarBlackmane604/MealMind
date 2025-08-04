@@ -124,7 +124,6 @@ export function Pricing() {
         description: `You've successfully upgraded to ${planId}.`,
       });
 
-      // Refresh the page to update the UI
       window.location.reload();
     } catch (error) {
       toast({
